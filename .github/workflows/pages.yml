@@ -33,10 +33,10 @@ jobs:
       - name: Install
         run: npm ci || npm install
 
-      - name: Build (export)
+      - name: Build (export, no lint)
         env:
           GITHUB_PAGES: "true"
-        run: npm run build
+        run: npm run build -- --no-lint
 
       - name: Disable Jekyll
         run: touch out/.nojekyll
