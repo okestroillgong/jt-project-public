@@ -5,18 +5,17 @@ const repoName = process.env.GITHUB_REPOSITORY?.split("/")[1] ?? "jt-project-pub
 const basePath = isGithubPages ? `/${repoName}` : "";
 
 const nextConfig: NextConfig = {
-  // GitHub Pages는 정적 호스팅이므로 export 모드로 빌드
+  // GitHub Pages는 정적 호스팅 → export
   output: "export",
   trailingSlash: true,
 
-  // project pages: https://<user>.github.io/<repo>/  경로 대응
+  // https://<user>.github.io/<repo>/ 경로 대응
   basePath,
   assetPrefix: basePath ? `${basePath}/` : undefined,
 
-  // next/image 최적화는 서버가 필요하므로 비활성화
+  // next/image 최적화는 서버가 필요해서 비활성화
   images: { unoptimized: true },
 
-  // (원래 파일에 있던 설정)
   devIndicators: false,
 
   webpack(config) {
