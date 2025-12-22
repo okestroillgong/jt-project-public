@@ -33,10 +33,20 @@ jobs:
       - name: Install
         run: npm ci || npm install
 
-      - name: Build (export, no lint)
+      # npm script에 next lint가 섞여있어도 영향 없게, Next CLI를 직접 호출
+      - name: Build (Next export, no lint)
         env:
           GITHUB_PAGES: "true"
-        run: npm run build -- --no-lint
+          NEXT_TELEMETRY_DISABLED: "1"
+        run: npx next build --no-lint
+
+      - name: Verify out/
+        run: |
+          if [ ! -d out ]; then
+            echo "::error::out directory not found. Check next.config.ts (output: \"export\")."
+            ls -la
+            exit 1
+          fi
 
       - name: Disable Jekyll
         run: touch out/.nojekyll
