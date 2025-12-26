@@ -31,7 +31,7 @@ jobs:
           cache: "npm"
 
       - name: Install
-        run: npm ci || npm install
+        run: npm install --legacy-peer-deps || npm install
 
       # npm script에 next lint가 섞여있어도 영향 없게, Next CLI를 직접 호출
       - name: Build (Next export, no lint)
@@ -66,3 +66,4 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+
