@@ -33,7 +33,7 @@ function VisitRegistrationPopupContent() {
   const filterLayout: FilterLayout = [
     {
         type: "grid",
-        columns: 3,
+        columns: 2,
         filters: [
             { name: "visitDate", type: "date", label: "방문요청일시" },
             { 

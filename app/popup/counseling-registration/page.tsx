@@ -161,19 +161,20 @@ export default function CounselingRegistrationPopup() {
                     values={filters}
                     onChange={handleFilterChange}
                 />
-                        <FilterContainer
-                            filterLayout={promiseLayout}
-                            values={filters}
-                            onChange={handleFilterChange}
-                        />
-                        <div className="flex flex-col gap-2">
-                            <h3 className="font-semibold">메모</h3>
-                            <FilterContainer
-                                filterLayout={memoLayout}
-                                values={filters}
-                                onChange={handleFilterChange}
-                            />
-                        </div>            </div>
+                <FilterContainer
+                    filterLayout={promiseLayout}
+                    values={filters}
+                    onChange={handleFilterChange}
+                />
+                <div className="flex flex-col gap-2">
+                    <h3 className="font-semibold">메모</h3>
+                    <FilterContainer
+                        filterLayout={memoLayout}
+                        values={filters}
+                        onChange={handleFilterChange}
+                    />
+                </div>           
+            </div>
         </div>
         
         <div className="flex flex-col gap-2">

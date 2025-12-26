@@ -1,29 +1,26 @@
-﻿import type { NextConfig } from "next";
-
-const isGithubPages = process.env.GITHUB_PAGES === "true";
-const repoName = process.env.GITHUB_REPOSITORY?.split("/")[1] ?? "jt-project-public";
-const basePath = isGithubPages ? `/${repoName}` : "";
+import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
-  // GitHub Pages는 정적 호스팅 → export
-  output: "export",
-  trailingSlash: true,
+  // Turbopack 설정 (Next.js 16 기본 모드)
+  turbopack: {
+    root: path.resolve(__dirname),
+    rules: {
+      "*.svg": {
+        loaders: ["@svgr/webpack"],
+        as: "*.js",
+      },
+    },
+  },
 
-  // https://<user>.github.io/<repo>/ 경로 대응
-  basePath,
-  assetPrefix: basePath ? `${basePath}/` : undefined,
-
-  // next/image 최적화는 서버가 필요해서 비활성화
-  images: { unoptimized: true },
-
-  devIndicators: false,
-
+  // Webpack 설정 (fallback)
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/i,
       issuer: /\.[jt]sx?$/,
       use: ["@svgr/webpack"],
     });
+
     return config;
   },
 };

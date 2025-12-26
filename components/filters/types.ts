@@ -60,6 +60,10 @@ export type Filter = {
   // For 'custom' type
   className?: string;
   render?: () => React.ReactNode;
+
+  // For align filter components
+  // 기본값은 'right' 입니다
+  labelAlign?: LabelAlign;
 };
 
 export type FilterGridRowConfig = {
@@ -70,3 +74,4 @@ export type FilterGridRowConfig = {
 
 export type FilterRow = Filter[] | FilterGridRowConfig;
 export type FilterLayout = FilterRow[];
+export type LabelAlign = "right" | "left";

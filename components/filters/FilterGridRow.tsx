@@ -1,10 +1,11 @@
 import React from "react";
-import { Filter, FilterGridRowConfig } from "./types";
+import { FilterGridRowConfig, LabelAlign } from "./types";
 import FilterWrapper from "./FilterWrapper";
 
 type FilterGridRowProps = FilterGridRowConfig & {
   values: Record<string, any>;
   onChange: (name: string, value: any) => void;
+  labelAlign?: LabelAlign;
 };
 
 const FilterGridRow: React.FC<FilterGridRowProps> = ({
@@ -12,6 +13,7 @@ const FilterGridRow: React.FC<FilterGridRowProps> = ({
   filters,
   values,
   onChange,
+  labelAlign = "right", // ✅ 기본 right
 }) => {
   return (
     <div
@@ -25,6 +27,7 @@ const FilterGridRow: React.FC<FilterGridRowProps> = ({
         >
           <FilterWrapper
             {...filter}
+            labelAlign={filter.labelAlign ?? labelAlign}
             value={values[filter.name]}
             onChange={onChange}
           />

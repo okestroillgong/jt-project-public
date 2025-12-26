@@ -64,7 +64,22 @@ export default function DebtAdjustmentManagementPopup() {
   }, [tableData]);
 
   // Filter Values
-  const [formValues, setFormValues] = useState<Record<string, any>>({});
+  const [formValues, setFormValues] = useState<Record<string, any>>({
+    // 변제계획 필드
+    repaymentGraceYn: "N",
+    gracePeriodMonths: "0",
+    graceInterest: "",
+    repaymentPeriodStart: "",
+    repaymentPeriodEnd: "",
+    repaymentPeriodMonths: "0",
+    monthlyPaymentDay: "",
+    gracePeriodEndDate: "",
+    repaymentMethod: "principal",
+    repaymentMethodOtherEnabled: false,
+    repaymentMethodOther: "",
+    paymentStartDate: "",
+    monthlyPaymentAmount: "",
+  });
 
   const handleFilterChange = (name: string, value: any) => {
     setFormValues((prev) => ({ ...prev, [name]: value }));
@@ -186,13 +201,102 @@ export default function DebtAdjustmentManagementPopup() {
       ...detailFormLayout.slice(0, 2),
       {
         type: "grid",
-        columns: 2, // 3 items in row 1, 2, but row 3 has 2 items? 
+        columns: 2, // 3 items in row 1, 2, but row 3 has 2 items?
         // "Maturity Extension" and "Others".
         filters: [
           { name: "maturityExtension", type: "checkbox", label: "만기연장" },
           { name: "others", type: "text", label: "기타", activator: true }, // activator provides the checkbox
         ]
       }
+  ];
+
+  // 변제계획 - 왼쪽 컬럼
+  const repaymentPlanLeftLayout: FilterLayout = [
+    {
+      type: "grid",
+      columns: 1,
+      filters: [
+        {
+          name: "repaymentGraceYn",
+          type: "select",
+          label: "상환 유예",
+          options: [
+            { value: "Y", label: "Y" },
+            { value: "N", label: "N" },
+          ],
+        },
+      ],
+    },
+    {
+      type: "grid",
+      columns: 2,
+      filters: [
+        { name: "gracePeriodMonths", type: "text", label: "유예기간 (개월)" },
+        { name: "graceInterest", type: "text", label: "유예이자 (월)" },
+      ],
+    },
+    {
+      type: "grid",
+      columns: 1,
+      filters: [
+        { name: "repaymentPeriod", type: "date-range", label: "상환기간" },
+      ],
+    },
+    {
+      type: "grid",
+      columns: 1,
+      filters: [
+        { name: "monthlyPaymentDay", type: "text", label: "매월 납입일 (일)" },
+      ],
+    },
+    {
+      type: "grid",
+      columns: 1,
+      filters: [
+        { name: "gracePeriodEndDate", type: "text", label: "거치기간종료일" },
+      ],
+    },
+  ];
+
+  // 변제계획 - 오른쪽 컬럼
+  const repaymentPlanRightLayout: FilterLayout = [
+    {
+      type: "grid",
+      columns: 1,
+      filters: [
+        {
+          name: "repaymentMethod",
+          type: "select",
+          label: "상환방법",
+          options: [
+            { value: "principal", label: "원금" },
+            { value: "equal", label: "원리금균등" },
+            { value: "maturity", label: "만기일시" },
+          ],
+        },
+      ],
+    },
+    {
+      type: "grid",
+      columns: 1,
+      filters: [
+        { name: "repaymentMethodOther", type: "text", label: "기타", activator: true },
+      ],
+    },
+    {
+      type: "grid",
+      columns: 1,
+      filters: [
+        { name: "paymentStartDate", type: "date", label: "납입 시작일" },
+      ],
+    },
+    {
+      type: "grid",
+      columns: 1,
+      filters: [
+        { name: "monthlyPaymentAmount", type: "text", label: "월납입액" },
+      ],
+    },
   ];
 
   const handleRowClick = (row: DebtAdjustmentData) => {
@@ -310,11 +414,213 @@ export default function DebtAdjustmentManagementPopup() {
             {/* 5. Second Filter Layout */}
             <div className="flex flex-col gap-2">
                  <h3 className="font-semibold text-base">채무조정 사항</h3>
-                 <FilterContainer 
+                 <FilterContainer
                     filterLayout={detailFormLayoutCorrected}
                     values={formValues}
                     onChange={handleFilterChange}
                 />
+            </div>
+
+            {/* 6. 변제계획 Layout */}
+            <div className="flex flex-col gap-2">
+                <h3 className="font-semibold text-base">변제계획</h3>
+                <div className="bg-white rounded-lg">
+                    <table className="w-full border-collapse">
+                        <tbody>
+                            {/* Row 1: 상환 유예 & 상환방법 */}
+                            <tr>
+                                <td className="border border-gray-300 bg-gray-50 px-3 py-2 font-medium text-sm w-32 align-middle">
+                                    상환 유예
+                                </td>
+                                <td className="border border-gray-300 px-3 py-2 align-middle">
+                                    <FilterContainer
+                                        filterLayout={[
+                                            {
+                                                type: "grid",
+                                                columns: 1,
+                                                filters: [
+                                                    {
+                                                        name: "repaymentGraceYn",
+                                                        type: "select",
+                                                        label: "(Y/N)",
+                                                        options: [
+                                                            { value: "Y", label: "Y" },
+                                                            { value: "N", label: "N" },
+                                                        ],
+                                                    },
+                                                ],
+                                            },
+                                            {
+                                                type: "grid",
+                                                columns: 2,
+                                                filters: [
+                                                    { name: "gracePeriodMonths", type: "text", label: "유예기간 (개월)" },
+                                                    { name: "graceInterest", type: "text", label: "유예이자 (월)" },
+                                                ],
+                                            },
+                                        ]}
+                                        values={formValues}
+                                        onChange={handleFilterChange}
+                                        labelAlign="left"
+                                        noBorder={true}
+                                    />
+                                </td>
+                                <td className="border border-gray-300 bg-gray-50 px-3 py-2 font-medium text-sm w-32 align-middle">
+                                    상환방법
+                                </td>
+                                <td className="border border-gray-300 px-3 py-2 align-middle">
+                                    <FilterContainer
+                                        filterLayout={[
+                                            {
+                                                type: "grid",
+                                                columns: 1,
+                                                filters: [
+                                                    {
+                                                        name: "repaymentMethod",
+                                                        type: "select",
+                                                        label: "",
+                                                        options: [
+                                                            { value: "principal", label: "원금" },
+                                                            { value: "equal", label: "원리금균등" },
+                                                            { value: "maturity", label: "만기일시" },
+                                                        ],
+                                                    },
+                                                ],
+                                            },
+                                            {
+                                                type: "grid",
+                                                columns: 1,
+                                                filters: [
+                                                    { name: "repaymentMethodOther", type: "text", label: "기타", activator: true },
+                                                ],
+                                            },
+                                        ]}
+                                        values={formValues}
+                                        onChange={handleFilterChange}
+                                        labelAlign="left"
+                                        noBorder={true}
+                                    />
+                                </td>
+                            </tr>
+                            {/* Row 2: 상환기간 & 납입 시작일 */}
+                            <tr>
+                                <td className="border border-gray-300 bg-gray-50 px-3 py-2 font-medium text-sm align-middle">
+                                    상환기간
+                                </td>
+                                <td className="border border-gray-300 px-3 py-2 align-middle">
+                                    <FilterContainer
+                                        filterLayout={[
+                                            {
+                                                type: "grid",
+                                                columns: 1,
+                                                filters: [
+                                                    { name: "repaymentPeriod", type: "date-range", label: "" },
+                                                ],
+                                            },
+                                            {
+                                                type: "grid",
+                                                columns: 1,
+                                                filters: [
+                                                    { name: "repaymentPeriodMonths", type: "text", label: "개월" },
+                                                ],
+                                            },
+                                        ]}
+                                        values={formValues}
+                                        onChange={handleFilterChange}
+                                        labelAlign="left"
+                                        noBorder={true}
+                                    />
+                                </td>
+                                <td className="border border-gray-300 bg-gray-50 px-3 py-2 font-medium text-sm align-middle">
+                                    납입 시작일
+                                </td>
+                                <td className="border border-gray-300 px-3 py-2 align-middle">
+                                    <FilterContainer
+                                        filterLayout={[
+                                            {
+                                                type: "grid",
+                                                columns: 1,
+                                                filters: [
+                                                    { name: "paymentStartDate", type: "date", label: "" },
+                                                ],
+                                            },
+                                        ]}
+                                        values={formValues}
+                                        onChange={handleFilterChange}
+                                        labelAlign="left"
+                                        noBorder={true}
+                                    />
+                                </td>
+                            </tr>
+                            {/* Row 3: 매월 납입일 & 월납입액 */}
+                            <tr>
+                                <td className="border border-gray-300 bg-gray-50 px-3 py-2 font-medium text-sm align-middle">
+                                    매월 납입일
+                                </td>
+                                <td className="border border-gray-300 px-3 py-2 align-middle">
+                                    <FilterContainer
+                                        filterLayout={[
+                                            {
+                                                type: "grid",
+                                                columns: 1,
+                                                filters: [
+                                                    { name: "monthlyPaymentDay", type: "text", label: "일" },
+                                                ],
+                                            },
+                                        ]}
+                                        values={formValues}
+                                        onChange={handleFilterChange}
+                                        labelAlign="left"
+                                        noBorder={true}
+                                    />
+                                </td>
+                                <td className="border border-gray-300 bg-gray-50 px-3 py-2 font-medium text-sm align-middle">
+                                    월납입액
+                                </td>
+                                <td className="border border-gray-300 px-3 py-2 align-middle">
+                                    <FilterContainer
+                                        filterLayout={[
+                                            {
+                                                type: "grid",
+                                                columns: 1,
+                                                filters: [
+                                                    { name: "monthlyPaymentAmount", type: "text", label: "" },
+                                                ],
+                                            },
+                                        ]}
+                                        values={formValues}
+                                        onChange={handleFilterChange}
+                                        labelAlign="left"
+                                        noBorder={true}
+                                    />
+                                </td>
+                            </tr>
+                            {/* Row 4: 거치기간종료일 */}
+                            <tr>
+                                <td className="border border-gray-300 bg-gray-50 px-3 py-2 font-medium text-sm align-middle">
+                                    거치기간종료일
+                                </td>
+                                <td className="border border-gray-300 px-3 py-2 align-middle" colSpan={3}>
+                                    <FilterContainer
+                                        filterLayout={[
+                                            {
+                                                type: "grid",
+                                                columns: 1,
+                                                filters: [
+                                                    { name: "gracePeriodEndDate", type: "text", label: "" },
+                                                ],
+                                            },
+                                        ]}
+                                        values={formValues}
+                                        onChange={handleFilterChange}
+                                        labelAlign="left"
+                                        noBorder={true}
+                                    />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

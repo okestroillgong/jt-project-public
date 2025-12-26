@@ -1,6 +1,6 @@
 import React from "react";
 import { usePathname } from "next/navigation";
-import type { Filter, FilterOption } from "./types";
+import type { Filter, FilterOption, LabelAlign } from "./types";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -35,10 +35,13 @@ import { Textarea } from "@/components/ui/textarea";
 type FilterWrapperProps = Filter & {
   value?: any;
   onChange?: (name: string, value: any) => void;
+  labelAlign?: LabelAlign;
 };
 
 const FilterWrapper: React.FC<FilterWrapperProps> = (filter) => {
   const tabId = usePathname();
+  const { labelAlign = "right" } = filter;
+  const isLeft = labelAlign === "left";
 
   const { name, value, onChange, activator, readonly, defaultValue, disabled } = filter;
 
@@ -558,7 +561,16 @@ const FilterWrapper: React.FC<FilterWrapperProps> = (filter) => {
 
   return (
     <div className={cn("flex flex-1 min-w-[320px] items-center h-9", filter.className)}>
-      <label className="w-48 flex-shrink-0 text-right text-sm font-medium mr-4" htmlFor={filter.type === 'checkbox' ? `checkbox-${filter.label}` : undefined}>
+      <label
+        className={cn(
+          // ✅ 기존 right 기본값은 그대로 유지 (기존 페이지 무영향)
+          !isLeft && "w-48 flex-shrink-0 text-right text-sm font-medium mr-4",
+
+          // ✅ left일 때만 레이아웃을 '압축'해서 입력도 같이 좌측으로 당김
+          isLeft && "w-auto flex-shrink-0 text-left text-sm font-medium mr-2"
+        )}
+        htmlFor={filter.type === "checkbox" ? `checkbox-${filter.label}` : undefined}
+      >
         {filter.label}
       </label>
       <div className="flex-grow flex items-center">
