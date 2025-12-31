@@ -1,9 +1,8 @@
-﻿name: Deploy Next.js (static export) to GitHub Pages
+﻿name: Deploy Vite (SPA) to GitHub Pages
 
 on:
   push:
-    branches: ["main"]
-  workflow_dispatch:
+    branches: [ "main" ]
 
 permissions:
   contents: read
@@ -28,21 +27,22 @@ jobs:
           cache: "npm"
 
       - name: Install
-        run: npm install
+        run: npm ci
 
-      - name: Build (static export -> out/)
-        env:
-          NEXT_TELEMETRY_DISABLED: "1"
-          NEXT_PUBLIC_BASE_PATH: "/${{ github.event.repository.name }}"
+      - name: Build
         run: npm run build
 
-      - name: Verify out/
-        run: test -d out
+      # SPA deep-link 대응: /popup/... 직접 접근 시 404 대신 앱이 뜨게 함
+      - name: SPA fallback (copy index.html -> 404.html)
+        run: cp dist/index.html dist/404.html
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./out
+          path: ./dist
 
   deploy:
     needs: build

@@ -1,17 +1,18 @@
 # JT Project (업무용 프론트엔드)
 
-본 프로젝트는 shadcn/ui, Tailwind CSS, Next.js를 사용하여 구축된 친애저축은행의 내부 금융 업무 관리 대시보드입니다.
+본 프로젝트는 shadcn/ui, Tailwind CSS, Vite + React Router를 사용하여 구축된 친애저축은행의 내부 금융 업무 관리 대시보드입니다.
 
 ---
 
 ## 1. 기술 스택 (Tech Stack)
 
-- **Framework**: Next.js 16.0.0 (React 19.2.0)
+- **Build Tool**: Vite 5.4.11
+- **Framework**: React 18.3.1 + React Router v7
 - **Language**: TypeScript 5+
 - **UI**: shadcn/ui, Tailwind CSS v4
 - **State Management**: Zustand
 - **Font**: Pretendard
-- **Icons**: Lucide (기본) + Custom Icons (`/assets/icons`)
+- **Icons**: Lucide (기본) + Custom Icons (`/src/assets/icons`)
 - **Linting**: ESLint
 
 ## 2. 시작하기 (Getting Started)
@@ -48,12 +49,16 @@
 
 ## 4. 프로젝트 구조 (Project Structure)
 
-- **`app/`**: Next.js App Router 기반의 메인 애플리케이션 디렉토리입니다.
-- **`components/app/`**: `Header`, `Sidebar`, `DataTable` 등 애플리케이션의 주요 레이아웃 및 고수준 컴포넌트가 위치합니다.
-- **`components/filters/`**: 동적 필터 UI를 구축하기 위한 재사용 가능한 필터 컴포넌트 모음입니다.
-- **`components/ui/`**: `Button`, `Input` 등 shadcn/ui에서 제공하는 범용 UI 기본 요소입니다.
-- **`assets/`**: 아이콘, 로고 등 정적 에셋 파일입니다.
-- **`lib/`**: 유틸리티 함수 및 전역 상태 관리(`Zustand`) 코드가 위치합니다.
+- **`src/`**: 메인 소스 코드 디렉토리입니다.
+  - **`src/main.tsx`**: 애플리케이션 진입점입니다.
+  - **`src/routes/`**: React Router 기반의 라우트 정의가 위치합니다.
+  - **`src/layouts/`**: `RootLayout`, `DashboardLayout`, `PopupLayout` 등 레이아웃 컴포넌트입니다.
+  - **`src/pages/`**: 대시보드 및 팝업 페이지 컴포넌트가 위치합니다.
+  - **`src/components/app/`**: `Header`, `Sidebar`, `DataTable` 등 애플리케이션의 주요 레이아웃 및 고수준 컴포넌트가 위치합니다.
+  - **`src/components/filters/`**: 동적 필터 UI를 구축하기 위한 재사용 가능한 필터 컴포넌트 모음입니다.
+  - **`src/components/ui/`**: `Button`, `Input` 등 shadcn/ui에서 제공하는 범용 UI 기본 요소입니다.
+  - **`src/assets/`**: 아이콘, 로고 등 정적 에셋 파일입니다.
+  - **`src/lib/`**: 유틸리티 함수 및 전역 상태 관리(`Zustand`) 코드가 위치합니다.
 
 ## 5. UI/UX 컨벤션
 
@@ -65,7 +70,7 @@
 - **탭 관리**: 각 탭은 독립적인 컨텍스트를 유지하며, 탭 우측의 'X' 버튼을 눌러 닫을 수 있습니다. 최대 10개까지 탭을 열 수 있습니다.
 - **레이아웃**: 탭 바는 화면 하단에 고정되어 있으며, 활성 탭은 초록색(`emerald`) 테마 색상으로 강조 표시됩니다.
 
-### 5.2. 사이드바 (`components/app/Sidebar.tsx`)
+### 5.2. 사이드바 (`src/components/app/Sidebar.tsx`)
 
 - **초기 상태**: 페이지 로드 시, 주 메뉴는 "상담관리"가 선택되며, 2차 사이드바 패널은 **닫힌 상태**로 시작합니다.
 - **호버 기능**: 2차 메뉴가 있는 주 메뉴("여신사후" 등)에 마우스를 올리면 해당 2차 사이드바 패널이 나타납니다. 마우스가 사이드바 영역을 벗어나면 패널이 닫힙니다.
@@ -80,7 +85,7 @@
 - **읽기 전용(Read-only) 필드**: `readonly` 또는 `disabled`로 설정된 `Input` 및 `Select` 필드는 사용자와의 상호작용이 불가능함을 명확히 나타내기 위해 `bg-gray-2.00` 배경색과 `text-gray-500` 텍스트 색상이 적용됩니다.
 - **페이지 내 탭 (`Tabs`)**: 페이지 내부에서 사용되는 탭 컴포넌트(`TabsList`)는 탭 사이의 간격이 제거되어 시각적으로 연결된 디자인을 제공합니다.
 
-### 5.4. `RightActions` 컴포넌트 (`components/app/RightActions.tsx`)
+### 5.4. `RightActions` 컴포넌트 (`src/components/app/RightActions.tsx`)
 
 - **중앙화된 액션 버튼**: 페이지 우측 상단에 위치하는 조회, 저장, 삭제 등 주요 액션 버튼들의 일관성을 유지합니다.
 - **'페이지 새로고침' 기능**: `id: 'reset'` 버튼은 `window.location.reload()`를 호출하는 고정 기능을 수행합니다.
@@ -144,9 +149,9 @@ type Filter = {
 
 ### 6.3. 주요 소스 코드
 
-- **`FilterContainer.tsx`**: `filterLayout` DSL을 받아 각 행의 타입에 따라 플렉스박스 또는 그리드 모드로 렌더링하는 메인 컨테이너입니다.
-- **`FilterGridRow.tsx`**: 그리드 행을 렌더링하며, 동적 클래스 문제를 피하기 위해 인라인 스타일로 그리드 구조를 생성합니다.
-- **`FilterWrapper.tsx`**: **그리드 모드의 핵심 컴포넌트**로, `[레이블] + [입력 필드]` 구조를 강제하여 모든 필터의 정렬을 보장하고, 모든 유효성 검사 규칙을 중앙에서 관리합니다.
+- **`src/components/filters/FilterContainer.tsx`**: `filterLayout` DSL을 받아 각 행의 타입에 따라 플렉스박스 또는 그리드 모드로 렌더링하는 메인 컨테이너입니다.
+- **`src/components/filters/FilterGridRow.tsx`**: 그리드 행을 렌더링하며, 동적 클래스 문제를 피하기 위해 인라인 스타일로 그리드 구조를 생성합니다.
+- **`src/components/filters/FilterWrapper.tsx`**: **그리드 모드의 핵심 컴포넌트**로, `[레이블] + [입력 필드]` 구조를 강제하여 모든 필터의 정렬을 보장하고, 모든 유효성 검사 규칙을 중앙에서 관리합니다.
 
 ---
 
@@ -208,12 +213,12 @@ npx tsc --noEmit
 
 ### 9.2. 구현 상세
 
--   **`lib/db.ts`**: IndexedDB 데이터베이스(`jt-project-db`)와 `pageStates` 테이블을 정의합니다. `pageStates` 테이블은 각 페이지의 경로(`tabId`)를 키로 사용하여 페이지 상태 객체를 저장합니다.
--   **`lib/store/pageStore.ts`**: 현재 활성화된 페이지의 상태를 관리하는 Zustand 스토어입니다. IndexedDB에서 상태를 불러오고(`loadState`), 변경된 상태를 저장하며(`saveState`, `updateFilters`), 탭이 닫힐 때 상태를 삭제하는(`clearState`) 기능을 제공합니다.
--   **`components/app/Sidebar.tsx`**: 사이드바 메뉴 클릭 시, 해당 페이지의 탭을 열고 IndexedDB에서 저장된 상태를 불러오도록 연동되었습니다.
--   **`components/app/DashboardTabs.tsx`**: 탭 클릭 시 해당 탭의 상태를 불러오고, 탭 닫기 시 IndexedDB에서 해당 탭의 상태를 삭제하도록 연동되었습니다.
--   **필터 컴포넌트 (`components/filters/`)**: 모든 필터 컴포넌트가 외부에서 `value`와 `onChange`를 받아 상태를 제어하는 '제어 컴포넌트'로 리팩토링되었습니다. `FilterLayout` 정의에 `name` 속성이 추가되어 각 필터의 상태를 고유하게 식별합니다.
--   **페이지 컴포넌트 연동**: `app/(dashboard)/after-loan/bond-adjustment/bond-inquiry/page.tsx`와 같은 페이지 컴포넌트에서 `usePageStore`를 사용하여 필터의 현재 상태를 가져오고, 변경 사항을 `updateFilters` 액션을 통해 IndexedDB에 반영합니다.
+-   **`src/lib/db.ts`**: IndexedDB 데이터베이스(`jt-project-db`)와 `pageStates` 테이블을 정의합니다. `pageStates` 테이블은 각 페이지의 경로(`tabId`)를 키로 사용하여 페이지 상태 객체를 저장합니다.
+-   **`src/lib/store/pageStore.ts`**: 현재 활성화된 페이지의 상태를 관리하는 Zustand 스토어입니다. IndexedDB에서 상태를 불러오고(`loadState`), 변경된 상태를 저장하며(`saveState`, `updateFilters`), 탭이 닫힐 때 상태를 삭제하는(`clearState`) 기능을 제공합니다.
+-   **`src/components/app/Sidebar.tsx`**: 사이드바 메뉴 클릭 시, 해당 페이지의 탭을 열고 IndexedDB에서 저장된 상태를 불러오도록 연동되었습니다.
+-   **`src/components/app/DashboardTabs.tsx`**: 탭 클릭 시 해당 탭의 상태를 불러오고, 탭 닫기 시 IndexedDB에서 해당 탭의 상태를 삭제하도록 연동되었습니다.
+-   **필터 컴포넌트 (`src/components/filters/`)**: 모든 필터 컴포넌트가 외부에서 `value`와 `onChange`를 받아 상태를 제어하는 '제어 컴포넌트'로 리팩토링되었습니다. `FilterLayout` 정의에 `name` 속성이 추가되어 각 필터의 상태를 고유하게 식별합니다.
+-   **페이지 컴포넌트 연동**: `src/pages/dashboard/after-loan/bond-adjustment/bond-inquiry/index.tsx`와 같은 페이지 컴포넌트에서 `usePageStore`를 사용하여 필터의 현재 상태를 가져오고, 변경 사항을 `updateFilters` 액션을 통해 IndexedDB에 반영합니다.
 
 ### 9.3. 사용 예시
 
@@ -303,7 +308,7 @@ npx tsc --noEmit
 ### 14.1. 새 창(Window) 기반 팝업 시스템
 
 -   **기능**: 기존의 모달(Modal) 방식 대신, `window.open`을 사용하여 완전히 독립된 새 브라우저 창으로 팝업을 여는 기능이 구현되었습니다. 이는 복잡한 UI를 가진 기능을 메인 화면과 분리하여 제공하기 위함입니다.
--   **전용 라우트**: 팝업 콘텐츠를 위한 전용 경로(`app/popup/`)와 레이아웃(`app/popup/layout.tsx`)이 생성되었습니다. 이 레이아웃은 메인 애플리케이션의 헤더나 사이드바를 포함하지 않아 팝업에 최적화된 UI를 제공합니다.
+-   **전용 라우트**: 팝업 콘텐츠를 위한 전용 경로(`src/pages/popup/`)와 레이아웃(`src/layouts/PopupLayout.tsx`)이 생성되었습니다. 이 레이아웃은 메인 애플리케이션의 헤더나 사이드바를 포함하지 않아 팝업에 최적화된 UI를 제공합니다.
 -   **적용 예시**: `RightActions`의 "문서검색" 버튼 클릭 시, `/popup/document-search` 페이지가 새 창으로 열립니다.
 
 ### 14.2. 사용자 경험(UX) 개선
@@ -395,7 +400,7 @@ npx tsc --noEmit
 
 ### 18.2. 아키텍처 개선
 
--   **팝업 크기 및 위치 중앙화**: 모든 팝업의 크기(1600x800)와 화면 중앙 위치를 `app/popup/layout.tsx`에서 `useEffect`를 통해 자동으로 관리합니다. 이로 인해 `window.open` 호출 시 크기 관련 인자를 반복적으로 명시할 필요가 없어졌습니다.
+-   **팝업 크기 및 위치 중앙화**: 모든 팝업의 크기(1600x800)와 화면 중앙 위치를 `src/layouts/PopupLayout.tsx`에서 `useEffect`를 통해 자동으로 관리합니다. 이로 인해 `window.open` 호출 시 크기 관련 인자를 반복적으로 명시할 필요가 없어졌습니다.
 -   **중첩 팝업 (Popup Chaining)**: 팝업 내에서 또 다른 팝업을 호출하는 기능이 구현되었습니다. 대표적으로 `문서검색` 팝업 내에서 `고객검색` 및 `부점관리` 팝업을 호출하여 데이터를 받아오는 기능이 구현되었습니다.
 
 ### 18.3. 핵심 컴포넌트 기능 확장
@@ -454,7 +459,7 @@ npx tsc --noEmit
 
     ```tsx
     import { useEffect } from "react";
-    import { usePathname } from "next/navigation";
+    import { usePathname } from "@/lib/hooks/useAppLocation";
     import { usePageStore } from "@/lib/store/pageStore";
     import { listenForPopupMessages } from "@/lib/popup-bus";
 
@@ -490,7 +495,7 @@ npx tsc --noEmit
 
     ```tsx
     const handleOpenPopup = () => {
-      const tabId = usePathname(); // 현재 페이지의 경로
+      const tabId = usePathname(); // 현재 페이지의 경로 (useAppLocation 훅 사용)
       window.open(
         `/popup/customer-search?openerTabId=${tabId}`,
         'CustomerSearch',
@@ -504,9 +509,7 @@ npx tsc --noEmit
 1.  **`tabId` 추출 및 데이터 전송**: `useSearchParams`를 사용해 URL에서 `openerTabId`를 가져온 후, 사용자가 데이터를 선택했을 때 `postPopupMessage` 유틸리티 함수를 호출하여 메인 페이지로 메시지를 전송합니다.
 
     ```tsx
-    "use client";
-
-    import { useSearchParams } from "next/navigation";
+    import { useSearchParams } from "@/lib/hooks/useAppLocation";
     import { postPopupMessage } from "@/lib/popup-bus";
 
     function CustomerSearchPopupContent() {
@@ -575,7 +578,7 @@ npx tsc --noEmit
 ### 21.1. 문제 1: 초기 접근 시 팝업을 열면 메인 페이지가 새로고침되는 현상
 
 -   **증상**: 캐시가 없는 상태에서 처음 페이지에 진입하여 팝업을 열면, 메인 페이지 전체가 리로드되어 모든 탭 상태가 초기화됨.
--   **원인**: `app/(dashboard)/layout.tsx`에 등록된 `beforeunload` 이벤트 핸들러가 `window.open`을 '페이지 이탈'로 잘못 간주하여 발생.
+-   **원인**: `src/layouts/DashboardLayout.tsx`에 등록된 `beforeunload` 이벤트 핸들러가 `window.open`을 '페이지 이탈'로 잘못 간주하여 발생.
 -   **해결**: `DashboardLayout`에서 `beforeunload` 이벤트 리스너를 등록하는 `useEffect` 훅을 완전히 제거하여 문제 해결.
 
 ### 21.2. 문제 2: 초기 접근 시 팝업에서 메인 페이지로 데이터 전달이 실패하는 현상
@@ -585,7 +588,7 @@ npx tsc --noEmit
 -   **해결**: `BroadcastChannel` API를 도입하여 메인 페이지와 팝업 간의 통신을 완전히 분리.
     1.  `lib/popup-bus.ts` 유틸리티 생성.
     2.  팝업을 여는 모든 페이지는 `window.open` 시 URL에 `openerTabId`를 포함시키고, `useEffect`에서 `listenForPopupMessages`를 통해 메시지 수신 대기.
-    3.  데이터를 전달하는 모든 팝업은 `useSearchParams`로 `openerTabId`를 확보한 후, `postPopupMessage`를 통해 데이터를 '방송'.
+    3.  데이터를 전달하는 모든 팝업은 `useSearchParams` (from `@/lib/hooks/useAppLocation`)로 `openerTabId`를 확보한 후, `postPopupMessage`를 통해 데이터를 '방송'.
     4.  이 아키텍처 변경을 통해 React 생명주기와 무관하게 안정적인 데이터 통신을 구현하여 최종적으로 문제 해결.
 
 ---
@@ -594,7 +597,7 @@ npx tsc --noEmit
 
 ### 22.1. 파산면책관리 페이지
 
--   **페이지 생성**: `app/(dashboard)/after-loan/bond-adjustment/bankruptcy-exemption/page.tsx` 경로에 "파산면책관리" 페이지가 추가되었습니다.
+-   **페이지 생성**: `src/pages/dashboard/after-loan/bond-adjustment/bankruptcy-exemption/index.tsx` 경로에 "파산면책관리" 페이지가 추가되었습니다.
 -   **주요 기능**:
     -   상단의 필터 영역과 하단의 탭 및 상세 정보 영역으로 구성된 표준 레이아웃을 따릅니다.
     -   `customer-search` 팝업과 연동되어 고객 정보를 검색하고 필터에 자동으로 채웁니다.
@@ -602,7 +605,7 @@ npx tsc --noEmit
 
 ### 22.2. 특수채권관리대장 페이지
 
--   **페이지 생성**: `app/(dashboard)/after-loan/special-bond/management-ledger/page.tsx` 경로에 "특수채권관리대장" 페이지가 추가되었습니다.
+-   **페이지 생성**: `src/pages/dashboard/after-loan/special-bond/management-ledger/index.tsx` 경로에 "특수채권관리대장" 페이지가 추가되었습니다.
 -   **고급 UI 구현**:
     -   **멀티 레벨 헤더 테이블**: "편입당시 채권내용"과 "채권회수내용" 등의 상위 헤더 아래에 "원금", "이자", "계" 등의 하위 헤더가 종속된 복잡한 테이블 구조를 `DataTable` 컴포넌트를 확장하여 구현했습니다.
     -   **탭-테이블 통합 레이아웃**: 탭 메뉴 바로 아래에 테이블이 밀착된 형태의 레이아웃을 구현하고, "건수" 표시를 탭 메뉴 우측에 배치하여 공간 효율성을 높였습니다.

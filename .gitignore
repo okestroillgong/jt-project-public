@@ -45,4 +45,9 @@ next-env.d.ts
 
 /pop-up-guide
 
-/.claude
+/.claudedist/
+/.claude/
+/dist
+
+ER.md
+RQ.md
