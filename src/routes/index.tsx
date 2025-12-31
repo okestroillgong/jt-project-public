@@ -104,6 +104,8 @@ const CreditRepaymentPopup = () => lazyLoad(() => import('@/pages/popup/credit-r
 const VisitRegistrationPopup = () => lazyLoad(() => import('@/pages/popup/visit-registration/page'));
 const CounselingRegistrationPopup = () => lazyLoad(() => import('@/pages/popup/counseling-registration/page'));
 
+const BASENAME = import.meta.env.BASE_URL === "/" ? undefined : import.meta.env.BASE_URL.replace(/\/$/, "");
+
 export const router = createBrowserRouter([
   // Login page (standalone, no layout)
   {
@@ -212,4 +214,4 @@ export const router = createBrowserRouter([
       },
     ],
   },
-]);
+], { basename: BASENAME });
