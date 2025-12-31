@@ -15,7 +15,7 @@ const navigate = useNavigate();
   const [clientIP, setClientIP] = useState('192.111.111.102');
   const [isLoading, setIsLoading] = useState(false);
 
-  // ??λ맂 濡쒓렇???뺣낫 遺덈윭?ㅺ린
+  // ???貫留?嚥≪뮄????類ｋ궖 ?븍뜄???븍┛
   useEffect(() => {
     const savedUserId = localStorage.getItem('savedUserId');
     const savedRemember = localStorage.getItem('rememberLogin');
@@ -24,8 +24,7 @@ const navigate = useNavigate();
       setRememberLogin(true);
     }
 
-    // ?대? 濡쒓렇?몃맂 ?곹깭硫?梨꾧텒?곷떞?쇰줈 ?대룞
-    const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+    // ??? 嚥≪뮄??紐껊쭆 ?怨밴묶筌?筌?쑨??怨룸뼖??곗쨮 ??猷?    const isLoggedIn = sessionStorage.getItem('isLoggedIn');
     if (isLoggedIn === 'true') {
       navigate('/counseling/general-counseling/bond-counseling');
     }
@@ -35,19 +34,18 @@ const navigate = useNavigate();
     e.preventDefault();
 
     if (!userId.trim()) {
-      alert('?ъ슜???꾩씠?붾? ?낅젰?댁＜?몄슂.');
+      alert('??????袁⑹뵠?遺? ??낆젾??곻폒?紐꾩뒄.');
       return;
     }
 
     if (!password.trim()) {
-      alert('?⑥뒪?뚮뱶瑜??낅젰?댁＜?몄슂.');
+      alert('??λ뮞???굡????낆젾??곻폒?紐꾩뒄.');
       return;
     }
 
     setIsLoading(true);
 
-    // 濡쒓렇???뺣낫 ???泥섎━
-    if (rememberLogin) {
+    // 嚥≪뮄????類ｋ궖 ????筌ｌ꼶??    if (rememberLogin) {
       localStorage.setItem('savedUserId', userId);
       localStorage.setItem('rememberLogin', 'true');
     } else {
@@ -55,18 +53,16 @@ const navigate = useNavigate();
       localStorage.removeItem('rememberLogin');
     }
 
-    // 濡쒓렇??泥섎━ (?ㅼ젣 援ы쁽?먯꽌??API ?몄텧)
-    // ?곕え?⑹쑝濡?媛꾨떒??泥섎━
-    setTimeout(() => {
+    // 嚥≪뮄???筌ｌ꼶??(??쇱젫 ?닌뗭겱?癒?퐣??API ?紐꾪뀱)
+    // ?怨뺛걟??뱀몵嚥?揶쏄쑬???筌ｌ꼶??    setTimeout(() => {
       sessionStorage.setItem('isLoggedIn', 'true');
       sessionStorage.setItem('userId', userId);
       setIsLoading(false);
 
-      // 梨꾧텒?곷떞 ??異붽? 諛??대룞
-      const bondCounselingPath = '/counseling/general-counseling/bond-counseling';
+      // 筌?쑨??怨룸뼖 ???곕떽? 獄???猷?      const bondCounselingPath = '/counseling/general-counseling/bond-counseling';
       addTab({
         id: bondCounselingPath,
-        label: '梨꾧텒?곷떞',
+        label: '筌?쑨??怨룸뼖',
         path: bondCounselingPath,
       });
       navigate(bondCounselingPath);
@@ -83,51 +79,51 @@ const navigate = useNavigate();
         backgroundRepeat: 'no-repeat',
       }}
     >
-      {/* 濡쒓렇??諛뺤뒪 而⑦뀒?대꼫 */}
+      {/* 嚥≪뮄???獄쏅벡???뚢뫂???瑗?*/}
       <div className="flex items-end gap-0">
-        {/* 濡쒓렇????諛뺤뒪 */}
+        {/* 嚥≪뮄?????獄쏅벡??*/}
         <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg px-8 py-12 w-[420px] relative z-10">
-          {/* 濡쒓퀬 ?곸뿭 */}
+          {/* 嚥≪뮄???怨몃열 */}
           <div className="flex items-center gap-2 mb-8">
             <img
               src={`${base}login/text-logo.png`}
-              alt="JT 移쒖븷?異뺤???
+              alt="JT 燁살뮇釉???곕벡???
               className="h-6"
             />
             <span className="text-gray-300 text-lg -mt-1">|</span>
             <span className="text-gray-500 text-xl font-medium -mt-1">Jany system</span>
           </div>
 
-          {/* 濡쒓렇????*/}
+          {/* 嚥≪뮄?????*/}
           <form onSubmit={handleLogin} className="space-y-4">
-            {/* ?ъ슜???꾩씠??*/}
+            {/* ??????袁⑹뵠??*/}
             <div className="space-y-2">
               <label className="text-sm font-semibold text-gray-700">
-                ?ъ슜???꾩씠??              </label>
+                ??????袁⑹뵠??              </label>
               <Input
                 type="text"
-                placeholder="?ъ슜???꾩씠?붾? ?낅젰?댁＜?몄슂."
+                placeholder="??????袁⑹뵠?遺? ??낆젾??곻폒?紐꾩뒄."
                 value={userId}
                 onChange={(e) => setUserId(e.target.value)}
                 className="w-full h-11"
               />
             </div>
 
-            {/* ?⑥뒪?뚮뱶 */}
+            {/* ??λ뮞???굡 */}
             <div className="space-y-2">
               <label className="text-sm font-semibold text-gray-700">
-                ?⑥뒪?뚮뱶
+                ??λ뮞???굡
               </label>
               <Input
                 type="password"
-                placeholder="?⑥뒪?뚮뱶瑜??낅젰?댁＜?몄슂."
+                placeholder="??λ뮞???굡????낆젾??곻폒?紐꾩뒄."
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full h-11"
               />
             </div>
 
-            {/* 濡쒓렇???뺣낫 ???& ?⑤쭚 IP */}
+            {/* 嚥≪뮄????類ｋ궖 ????& ??ㅼ춾 IP */}
             <div className="flex items-center justify-between py-2">
               <div className="flex items-center gap-2">
                 <Checkbox
@@ -139,28 +135,28 @@ const navigate = useNavigate();
                   htmlFor="rememberLogin"
                   className="text-sm font-semibold text-gray-600 cursor-pointer"
                 >
-                  濡쒓렇?몄젙蹂????                </label>
+                  嚥≪뮄??紐꾩젟癰?????                </label>
               </div>
               <span className="text-sm text-gray-500">
-                ?⑤쭚 IP : {clientIP}
+                ??ㅼ춾 IP : {clientIP}
               </span>
             </div>
 
-            {/* 濡쒓렇??踰꾪듉 */}
+            {/* 嚥≪뮄???甕곌쑵??*/}
             <Button
               type="submit"
               disabled={isLoading}
               className="w-full h-12 mt-16 bg-[#22c55e] hover:bg-[#16a34a] text-white font-medium text-base"
             >
-              {isLoading ? '濡쒓렇??以?..' : '濡쒓렇??}
+              {isLoading ? '嚥≪뮄???餓?..' : '嚥≪뮄???}
             </Button>
           </form>
         </div>
 
-        {/* ?붿궡??李⑦듃 ?대?吏 */}
+        {/* ?遺욧땀??筌△뫂?????筌왖 */}
         <img
           src={`${base}login/arrow-image.png`}
-          alt="?깆옣 李⑦듃"
+          alt="?源놁삢 筌△뫂??
           className="w-[280px] h-auto -ml-2 mb-4 relative z-0"
         />
       </div>
