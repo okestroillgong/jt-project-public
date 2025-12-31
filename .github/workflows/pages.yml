@@ -33,8 +33,6 @@ jobs:
       - name: Build
         run: npm run build
 
-      # GitHub Pages는 deep link(/popup/...)를 index.html로 리라이트해주지 않음
-      # => dist/404.html을 index.html로 복사해서 SPA 라우팅이 뜨도록 함
       - name: SPA fallback (404.html)
         run: cp dist/index.html dist/404.html
 

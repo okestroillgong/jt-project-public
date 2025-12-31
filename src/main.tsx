@@ -1,11 +1,9 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { RouterProvider } from "react-router-dom";
-import "./index.css";
-import { router } from "./routes";
-import { toAppUrl } from "@/lib/toAppUrl";
-
-(globalThis as any).__toAppUrl = toAppUrl;
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { RouterProvider } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
+import { router } from './routes';
+import './styles/globals.css';
 
 /**
  * GitHub Pages(Project Pages)에서는 앱이 /<repo>/ 아래에서 동작합니다.
@@ -33,8 +31,10 @@ function patchWindowOpenForGitHubPages() {
 
 patchWindowOpenForGitHubPages();
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <HelmetProvider>
+      <RouterProvider router={router} />
+    </HelmetProvider>
   </React.StrictMode>
 );
